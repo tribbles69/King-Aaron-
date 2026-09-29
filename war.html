@@ -169,9 +169,12 @@ html{scroll-behavior:smooth}
     <li>The war shall be waged by proclamation alone. Its only weapons are dates, sources and laughter.</li>
     <li>No subject of the Realm shall threaten, harass, contact or impersonate any member of a sinning house, nor any person who keeps their company. Individuals are not the enemy. False crowns are.</li>
     <li>A sinning house may make peace at any time by renouncing every claim to the lands of living peoples. The Crown will accept such a surrender with gladness and without further comment.</li>
-    <li>Any claimant who would rather settle the matter by strength may meet the King in a <strong>Trial of Strength</strong>: a full powerlifting meet of squat, bench press and deadlift, judged by three referees, scored in IPF GL points, each claimant lifting in his own person, all proceeds to an organisation led by the Mapuche people. Challenges close on <strong>1 January 2027</strong>, after which all rival claims are held forfeit by default.</li>
+    <li>Any claimant who would rather settle the matter by strength may meet the King in a <strong>Trial of Strength</strong>: a full powerlifting meet of squat, bench press and deadlift, judged by three referees, scored in IPF GL points, each claimant lifting in his own person, all proceeds to an organisation led by the Mapuche people. Challenges close on <strong>1 January 2027</strong>.</li>
+    <li>Should no claimant step up to the bar by that date, all rival claims shall be held <strong>forfeit by default</strong>, and the Crown of Araucanía and Patagonia shall pass to the Kingdom of Kur ĝešgigal by right of the unanswered challenge.</li>
+    <li>Upon passing, the Crown of Araucanía and Patagonia shall be annexed as a Province of Kur ĝešgigal. In keeping with Article V, it shall hold no land: every claim to the lands of the Mapuche made in its name since 1860 shall be dissolved in that same hour, and the Province shall consist of the title alone, which weighs nothing.</li>
+    <li>The former claimants may keep their styles, with the Crown's blessing, and shall henceforth be known as <strong>Princes in Exile in Exile</strong>, being exiled now from a kingdom that was itself already in exile.</li>
   </ol>
-  <p class="tally"><span>Casualties to date: <b>0</b></span><span>Territory changed hands: <b>none</b></span><span>Invasions of the Realm: <b>0</b></span></p>
+  <p class="tally"><span>Casualties to date: <b>0</b></span><span>Territory changed hands: <b>none</b></span><span>Days until forfeit: <b id="forfeit">…</b></span><span>Invasions of the Realm: <b>0</b></span></p>
 </section>
 
 <section id="sources">
@@ -192,6 +195,10 @@ html{scroll-behavior:smooth}
   <p>The Kingdom of Kur ĝešgigal is a work of satire by Aaron Clews. It is not a state, holds no land, collects no money and sells no titles. Letters Patent issued here confer no rank, title, precedence or privilege of any kind. The Kingdom is not affiliated with any claimant to any throne, nor with any Mapuche organisation, and does not speak for the Mapuche people.</p>
 </footer></div>
 
-
+<script>
+(function(){var el=document.getElementById('forfeit');if(!el)return;
+var d=Math.ceil((Date.UTC(2027,0,1)-Date.now())/864e5);
+el.textContent=d>0?d:'Forfeited';})();
+</script>
 </body>
 </html>

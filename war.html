@@ -1,0 +1,221 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Declaration of War</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Unicase:wght@400;600&family=Spectral:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+/* Layout: a royal register in lapis and gold (the materials of Ur), one reading column, the Realm diagram as the opening plate. */
+:root{
+  --bg:#0f1a3a; --panel:#152450; --ink:#ece7d8; --muted:#a8b0c9; --gold:#d8b155; --rule:#29396b; --lapis:#8aa6ff;
+  --mantle:#3b4a7a; --outer:#c9822f; --inner:#e9c46a; --seal:#e0685a;
+  --display:"Cormorant Unicase", "Cormorant", Georgia, serif;
+  --body:"Spectral", "Iowan Old Style", Georgia, serif;
+  --mono:"IBM Plex Mono", ui-monospace, Menlo, Consolas, monospace;
+  color-scheme:dark;
+}
+@media (prefers-color-scheme: light){ :root:not([data-theme="dark"]){
+  --bg:#eef0f5; --panel:#ffffff; --ink:#14203f; --muted:#56607c; --gold:#946d1c; --rule:#d2d8e6; --lapis:#2b4aa8;
+  --mantle:#b9c3de; --outer:#d58a36; --inner:#e6b94d; --seal:#a8322a; color-scheme:light } }
+:root[data-theme="light"]{
+  --bg:#eef0f5; --panel:#ffffff; --ink:#14203f; --muted:#56607c; --gold:#946d1c; --rule:#d2d8e6; --lapis:#2b4aa8;
+  --mantle:#b9c3de; --outer:#d58a36; --inner:#e6b94d; --seal:#a8322a; color-scheme:light }
+
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--ink);font-family:var(--body);font-size:1.03rem;line-height:1.68;padding-inline:16px}
+a{color:var(--lapis);text-underline-offset:3px}
+a:focus-visible,button:focus-visible,input:focus-visible,select:focus-visible{outline:2px solid var(--gold);outline-offset:2px}
+.wrap{max-width:46rem;margin-inline:auto}
+header.mast{padding-block:2.4rem 1.3rem;border-bottom:3px double var(--rule);display:grid;gap:.5rem}
+.mast .kicker{font-family:var(--mono);font-size:.72rem;letter-spacing:.14em;text-transform:uppercase;color:var(--gold);margin:0}
+.mast h1{font-family:var(--display);font-weight:600;font-size:clamp(2.1rem,7vw,3.5rem);line-height:1;margin:0;text-wrap:balance;letter-spacing:.01em}
+.mast .style{font-style:italic;color:var(--muted);margin:0;max-width:60ch;text-wrap:balance}
+.notice{font-family:var(--mono);font-size:.7rem;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin:0}
+nav.bar{position:sticky;top:env(safe-area-inset-top,0px);z-index:5;background:var(--bg);border-bottom:1px solid var(--rule);margin-inline:-16px;padding-inline:16px}
+nav.bar ul{list-style:none;margin:0 auto;padding:.55rem 0;display:flex;gap:1.2rem;flex-wrap:wrap;max-width:46rem}
+nav.bar a{font-family:var(--display);font-weight:600;font-size:1.05rem;text-decoration:none;color:var(--ink)}
+nav.bar a:hover,nav.bar a[aria-current="page"]{color:var(--gold)}
+section{padding-block:2.6rem 1rem;border-bottom:1px solid var(--rule)}
+section:last-of-type{border-bottom:0}
+.eyebrow{font-family:var(--mono);font-size:.72rem;letter-spacing:.12em;text-transform:uppercase;color:var(--gold);margin:0 0 .4rem}
+h2{font-family:var(--display);font-weight:600;font-size:clamp(1.7rem,4.8vw,2.4rem);line-height:1.1;margin:0 0 1rem;text-wrap:balance}
+h3{font-family:var(--display);font-weight:600;font-size:1.35rem;margin:0}
+p{margin:0 0 1rem;max-width:65ch}
+
+.realm{display:grid;grid-template-columns:minmax(0,15rem) minmax(0,1fr);gap:1.6rem;align-items:center}
+@media (max-width:640px){.realm{grid-template-columns:1fr}.realm svg{max-width:16rem}}
+.realm svg{width:100%;height:auto;display:block}
+.realm .mantle{fill:var(--mantle)} .realm .outer{fill:var(--outer)} .realm .inner{fill:var(--inner)}
+.realm .crust{fill:none;stroke:var(--ink);stroke-width:1.5}
+.realm .dot{fill:var(--seal)} .realm .ring{fill:none;stroke:var(--seal);stroke-width:1.5}
+.facts{margin:0;display:grid;grid-template-columns:auto 1fr;gap:.45rem 1rem;align-items:baseline}
+.facts dt{font-family:var(--mono);font-size:.72rem;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+.facts dd{margin:0;font-variant-numeric:tabular-nums}
+.legend{list-style:none;padding:0;margin:.8rem 0 0;display:flex;flex-wrap:wrap;gap:.4rem 1rem;font-size:.85rem;color:var(--muted)}
+.legend span{display:inline-block;width:.7rem;height:.7rem;border-radius:50%;margin-right:.35rem;vertical-align:-.05rem}
+
+.charter{background:var(--panel);border:1px solid var(--rule);padding:1.4rem 1.3rem;display:grid;gap:1.1rem}
+.charter .given{font-family:var(--mono);font-size:.78rem;color:var(--muted);margin:0}
+.article{display:grid;gap:.25rem}
+.article h3 .num{font-family:var(--mono);font-size:.8rem;color:var(--gold);letter-spacing:.08em;margin-right:.5rem}
+.article p{margin:0}
+.signed{font-family:var(--display);font-weight:600;font-size:1.5rem;margin:0}
+
+.portrait{margin:0;max-width:24rem}
+.portrait img{display:block;width:100%;height:auto;border:1px solid var(--rule);padding:6px;background:var(--panel)}
+.portrait figcaption{font-family:var(--mono);font-size:.74rem;color:var(--muted);margin-top:.45rem}
+
+.office{display:grid;grid-template-columns:minmax(0,17rem) minmax(0,1fr);gap:1.4rem;align-items:start}
+@media (max-width:760px){.office{grid-template-columns:1fr}}
+form.petition{display:grid;gap:.9rem;background:var(--panel);border:1px solid var(--rule);padding:1.1rem}
+label{display:grid;gap:.25rem;font-family:var(--mono);font-size:.72rem;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+input,select{font-family:var(--body);font-size:1rem;text-transform:none;letter-spacing:0;color:var(--ink);background:var(--bg);border:1px solid var(--rule);padding:.5rem .55rem;border-radius:2px;width:100%}
+.btns{display:flex;flex-wrap:wrap;gap:.6rem}
+button{font-family:var(--display);font-weight:600;font-size:1.05rem;padding:.45rem .9rem;border-radius:2px;cursor:pointer;border:1px solid var(--gold);background:var(--gold);color:var(--bg)}
+button.ghost{background:transparent;color:var(--gold)}
+.hint{font-size:.85rem;color:var(--muted);margin:0}
+#status{font-family:var(--mono);font-size:.78rem;color:var(--muted);min-height:1.2em;margin:0}
+.certfig{margin:0;display:grid;gap:.5rem;min-width:0}
+.certfig img{width:100%;height:auto;border:1px solid var(--rule);box-shadow:0 6px 24px rgba(0,0,0,.25);background:#fff}
+.certfig figcaption{font-size:.85rem;color:var(--muted)}
+canvas#cert{display:none}
+
+.sinners{list-style:none;margin:0;padding:0;display:grid;gap:1.4rem}
+.sinner{background:var(--panel);border:1px solid var(--rule);border-top:3px solid var(--seal);padding:1.2rem 1.2rem 1rem;display:grid;gap:.8rem}
+.sinner .who{display:flex;flex-wrap:wrap;justify-content:space-between;gap:.3rem 1rem;align-items:baseline}
+.sinner .status{font-family:var(--mono);font-size:.7rem;letter-spacing:.08em;text-transform:uppercase;color:var(--seal);border:1px solid currentColor;padding:.05rem .4rem;border-radius:2px}
+.counts{list-style:none;margin:0;padding:0;display:grid;gap:.75rem}
+.counts li{display:grid;grid-template-columns:2.6rem 1fr;gap:.6rem}
+.counts .n{font-family:var(--mono);font-size:.78rem;color:var(--gold);padding-top:.2rem}
+.counts b{font-family:var(--display);font-weight:600;font-size:1.12rem;display:block;line-height:1.25}
+.counts div{min-width:0}
+.counts .ev{font-size:.92rem;color:var(--muted);display:block;margin-top:.15rem}
+.terms{margin:0;padding-left:1.3rem;display:grid;gap:.5rem}
+.terms li::marker{font-family:var(--mono);color:var(--gold)}
+.tally{font-family:var(--mono);font-size:.85rem;display:flex;flex-wrap:wrap;gap:.4rem 1.6rem;margin:.6rem 0 0}
+.tally b{font-weight:500;color:var(--gold)}
+.sources{font-size:.85rem;color:var(--muted);padding-left:1.1rem}
+.sources li{margin-bottom:.3rem}
+footer{padding-block:2rem 3rem;font-family:var(--mono);font-size:.74rem;color:var(--muted);line-height:1.6;border-top:3px double var(--rule)}
+footer p{max-width:none}
+html{scroll-behavior:smooth}
+@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
+</style>
+</head>
+<body>
+
+<div class="wrap">
+<header class="mast">
+  <p class="kicker">Proclamation of the Crown · 29 September 2026</p>
+  <h1>Kingdom of Kur ĝešgigal</h1>
+  <p class="style">Aaron the First, by the Will of the One Holy Spirit, King of Kur ĝešgigal, Sovereign of the Still Point, Keeper of the Weightless Throne</p>
+  <p class="notice">A satirical kingdom · No titles sold · Nothing here confers anything</p>
+</header>
+</div>
+<nav class="bar" aria-label="Sections"><ul>
+  <li><a href="index.html#realm">The Realm</a></li>
+  <li><a href="index.html#charter">Charter</a></li>
+  <li><a href="index.html#patent">Letters Patent</a></li>
+  <li><a href="war.html" aria-current="page">Declaration of War</a></li>
+</ul></nav>
+<main class="wrap">
+
+<section id="declaration">
+  <p class="eyebrow">Royal Proclamation No. 1</p>
+  <h2>Declaration of War upon the Sinners against the Still Point</h2>
+  <div class="charter">
+    <p class="given">Given at the Still Point, the 29th day of September, 2026</p>
+    <p>We, <strong>Aaron the First</strong>, by the Will of the One Holy Spirit, King of Kur ĝešgigal,</p>
+    <p><strong>Having founded Our Realm</strong> upon the one point of the Earth that no people has ever called home, and having bound Ourselves by Article V of Our Charter to recognise no pretender who claims the homes of others;</p>
+    <p><strong>And holding</strong> that a false crown is a small image of the Demiurge's great falsehood, a rule over what it did not make and does not understand;</p>
+    <p><strong>Do hereby declare war</strong> upon the sinners named below, for the crimes set against them, until such time as they repent.</p>
+    <p class="signed">Aaron R.</p>
+  </div>
+</section>
+
+<section id="sinners">
+  <p class="eyebrow">The Register of Sinners</p>
+  <h2>Those against whom war is declared</h2>
+  <ul class="sinners">
+
+    <li class="sinner">
+      <div class="who"><h3>The False Kingdom of Araucanía and Patagonia, in all its factions</h3><span class="status">At war</span></div>
+      <ol class="counts">
+        <li><span class="n">I</span><div><b>Claiming a people's land that was never theirs to claim</b>
+          <span class="ev">The Kingdom rests on two decrees issued in 1860 by a French lawyer, asserting a crown over Mapuche territory in what is now Chile and Argentina. It is still claimed from France today.</span></div></li>
+        <li><span class="n">II</span><div><b>Bearing a false title</b>
+          <span class="ev">No state on Earth has ever recognised the Kingdom. A Paris court ruled in 1873 that its founder could not justify his title as a sovereign, and another in 1996 dismissed a successor's case because he could not justify his titles.</span></div></li>
+        <li><span class="n">III</span><div><b>Falsifying scripture to crown itself</b>
+          <span class="ev">On 27 August 2026 a Wikipedia account named PrinceAntoineV, whose own user page undertakes not to edit the Kingdom's articles directly, added “Current Prince: Antoine V” to the Kingdom's article.</span></div></li>
+        <li><span class="n">IV</span><div><b>Schism</b>
+          <span class="ev">Since 2023 the house has been divided between rival councils and rival Princes, each holding the other to be an imposter. In January 2026 one faction's Prince stripped his own predecessor of his honours.</span></div></li>
+        <li><span class="n">V</span><div><b>Attempting to trademark a throne</b>
+          <span class="ev">In an official statement of 10 January 2026, one faction declared the Kingdom's name a registered trademark and threatened legal action against its use by others.</span></div></li>
+        <li><span class="n">VI</span><div><b>Being French</b>
+          <span class="ev">Self-evident. The Crown notes that England has pursued this charge since at least 1337.</span></div></li>
+      </ol>
+    </li>
+
+    <li class="sinner">
+      <div class="who"><h3>The Sellers of Titles</h3><span class="status">At war</span></div>
+      <ol class="counts">
+        <li><span class="n">I</span><div><b>Simony of the nobility</b>
+          <span class="ev">Whoever sells a lordship, a barony or a square foot of land with “Laird” attached sells a weight that does not exist. By Article IV, whoever sells a title is not a king.</span></div></li>
+      </ol>
+    </li>
+
+    <li class="sinner">
+      <div class="who"><h3>The Heralds of Paid Tidings</h3><span class="status">At war</span></div>
+      <ol class="counts">
+        <li><span class="n">I</span><div><b>False prophecy</b>
+          <span class="ev">Press releases dressed as news, published by the parties they praise and presented to the public as independent reporting.</span></div></li>
+      </ol>
+    </li>
+
+    <li class="sinner">
+      <div class="who"><h3>The Circuit of Exiled Crowns</h3><span class="status">At war</span></div>
+      <ol class="counts">
+        <li><span class="n">I</span><div><b>Mutual coronation</b>
+          <span class="ev">The self-styled royal houses of vanished or never-existent thrones that confer honours upon one another, so that each false crown may be held up by the next.</span></div></li>
+      </ol>
+    </li>
+
+  </ul>
+</section>
+
+<section id="conduct">
+  <p class="eyebrow">Articles of War</p>
+  <h2>The conduct of the war</h2>
+  <ol class="terms">
+    <li>The war shall be waged by proclamation alone. Its only weapons are dates, sources and laughter.</li>
+    <li>No subject of the Realm shall threaten, harass, contact or impersonate any sinner, nor any person who keeps their company. Individuals are not the enemy. False crowns are.</li>
+    <li>Any sinner may make peace at any time by renouncing every claim to the lands of living peoples. The Crown will accept such a surrender with gladness and without further comment.</li>
+    <li>Any claimant who would rather settle the matter by strength may meet the King in a <strong>Trial of Strength</strong>: a full powerlifting meet of squat, bench press and deadlift, judged by three referees, scored in IPF GL points, each claimant lifting in his own person, all proceeds to an organisation led by the Mapuche people. Challenges close on <strong>1 January 2027</strong>, after which all rival claims are held forfeit by default.</li>
+  </ol>
+  <p class="tally"><span>Casualties to date: <b>0</b></span><span>Territory changed hands: <b>none</b></span><span>Invasions of the Realm: <b>0</b></span></p>
+</section>
+
+<section id="sources">
+  <p class="eyebrow">The Evidence</p>
+  <h2>Sources for the charges</h2>
+  <ol class="sources">
+    <li><a href="https://en.wikipedia.org/wiki/Kingdom_of_Araucan%C3%ADa_and_Patagonia" rel="noopener">Kingdom of Araucanía and Patagonia</a>, English Wikipedia, including its revision history</li>
+    <li><a href="https://fr.wikipedia.org/wiki/Royaume_d'Araucanie_et_de_Patagonie" rel="noopener">Royaume d'Araucanie et de Patagonie</a>, French Wikipedia (the 2023–2024 schism)</li>
+    <li><a href="https://en.wikipedia.org/wiki/Philippe_Boiry" rel="noopener">Philippe Boiry</a>, English Wikipedia (the 1996 case)</li>
+    <li><a href="https://www.theguardian.com/world/2018/mar/21/kingdom-mapuche-chile-patagonia-araucania" rel="noopener">Why the lost kingdom of Patagonia is a live issue for Chile's Mapuche people</a>, The Guardian, 2018</li>
+    <li><a href="https://www.mapuche-nation.org/blog/kingdom-of-araucania-and-patagonia-communique/" rel="noopener">Communiqué on the 2023 succession dispute</a>, Mapuche International Link</li>
+    <li>Official statement of the Royal House of Araucania and Patagonia, 10 January 2026, published on its social media accounts</li>
+  </ol>
+</section>
+
+</main>
+<div class="wrap"><footer>
+  <p>The Kingdom of Kur ĝešgigal is a work of satire by Aaron Clews. It is not a state, holds no land, collects no money and sells no titles. Letters Patent issued here confer no rank, title, precedence or privilege of any kind. The Kingdom is not affiliated with any claimant to any throne, nor with any Mapuche organisation, and does not speak for the Mapuche people.</p>
+</footer></div>
+
+
+</body>
+</html>

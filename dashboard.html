@@ -121,8 +121,27 @@ button[aria-pressed="true"]{background:var(--gold);color:var(--bg)}
 /* Diplomacy */
 .diplo{display:grid;grid-template-columns:minmax(0,1.05fr) minmax(0,1fr);gap:18px}
 @media (max-width:1000px){.diplo{grid-template-columns:1fr}}
-.filters{display:flex;flex-wrap:wrap;gap:.4rem;margin-bottom:.8rem}
-.filters button{font-size:.88rem;padding:.2rem .6rem}
+.roster{margin-bottom:16px;max-width:46rem}
+.intel{background:var(--panel2);border:1px solid var(--rule);padding:1rem 1.1rem;display:grid;gap:.8rem;align-content:start;min-width:0}
+.intel form{display:grid;grid-template-columns:9.5rem minmax(0,1fr);gap:.6rem}
+.intel label{display:grid;gap:.2rem;font-family:var(--mono);font-size:.62rem;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);min-width:0}
+.intel label.wide{grid-column:1/-1}
+.intel input,.intel select,.intel textarea{font-family:var(--body);font-size:.95rem;letter-spacing:0;text-transform:none;color:var(--ink);background:var(--panel);border:1px solid var(--rule);border-radius:2px;padding:.4rem .5rem;width:100%}
+.intel textarea{min-height:4.6rem;resize:vertical}
+.intel .acts{grid-column:1/-1;display:flex;flex-wrap:wrap;gap:.5rem;align-items:center}
+.intel .tools{display:flex;flex-wrap:wrap;gap:.5rem;align-items:center;justify-content:space-between;border-top:1px solid var(--rule);padding-top:.7rem}
+.intel .tools input[type=search]{max-width:14rem}
+.intel .tools .btns{display:flex;gap:.4rem;flex-wrap:wrap}
+.intel .tools button{font-size:.88rem;padding:.2rem .6rem}
+.log{list-style:none;margin:0;padding:0;display:grid;gap:.55rem;max-height:30rem;overflow:auto}
+.log li{border-left:2px solid var(--gold);padding:.1rem 0 .1rem .7rem;display:grid;gap:.15rem}
+.log .meta{display:flex;flex-wrap:wrap;gap:.3rem .8rem;align-items:baseline;font-family:var(--mono);font-size:.68rem;color:var(--muted)}
+.log .meta .kind{color:var(--gold);text-transform:uppercase;letter-spacing:.08em}
+.log .txt{font-size:.93rem;white-space:pre-wrap;overflow-wrap:anywhere}
+.log .src{font-size:.8rem;overflow-wrap:anywhere}
+.log .del{margin-left:auto;font-family:var(--mono);font-size:.68rem;border:0;padding:0;background:none;color:var(--muted);text-decoration:underline;cursor:pointer}
+.log .empty{border:0;padding:0;color:var(--muted);font-size:.9rem}
+@media (max-width:560px){.intel form{grid-template-columns:1fr}}
 .rel{display:grid;gap:2px}
 .rel .axis{display:grid;grid-template-columns:11rem minmax(0,1fr) 3.2rem;font-family:var(--mono);font-size:.62rem;color:var(--muted);letter-spacing:.06em;text-transform:uppercase;padding-bottom:.2rem}
 .rel .axis span:nth-child(2){display:flex;justify-content:space-between}
@@ -151,10 +170,6 @@ button[aria-pressed="true"]{background:var(--gold);color:var(--bg)}
 .envoy{font-style:italic;border-left:2px solid var(--gold);padding-left:.8rem;margin:0;font-size:.95rem;min-height:1.5em}
 #tip{position:fixed;pointer-events:none;z-index:20;background:var(--bg);border:1px solid var(--rule);padding:.35rem .55rem;font-size:.8rem;box-shadow:0 4px 16px rgba(0,0,0,.3);display:none;max-width:16rem}
 #tip b{font-family:var(--mono);font-weight:500}
-details.tbl summary{cursor:pointer;font-family:var(--mono);font-size:.72rem;color:var(--muted);margin-top:.8rem}
-details.tbl table{width:100%;border-collapse:collapse;font-size:.82rem;margin-top:.4rem}
-details.tbl th,details.tbl td{text-align:left;padding:.2rem .4rem;border-bottom:1px solid var(--rule)}
-details.tbl td:last-child,details.tbl th:last-child{text-align:right;font-family:var(--mono)}
 
 footer{padding-block:1.6rem 2.6rem;margin-top:16px;font-family:var(--mono);font-size:.72rem;color:var(--muted);line-height:1.6;border-top:3px double var(--rule)}
 .nojs{display:none}
@@ -319,16 +334,33 @@ footer{padding-block:1.6rem 2.6rem;margin-top:16px;font-family:var(--mono);font-
   <section class="panel c12" aria-labelledby="h-dip" id="diplomacy">
     <p class="eyebrow">Foreign office</p>
     <h2 id="h-dip">Diplomacy: the other crowns of the Earth</h2>
+    <p class="small muted" style="max-width:70ch">Powers on file with the Foreign Office. More will be entered as the Crown takes notice of them.</p>
+    <div class="rel roster" id="rel" role="listbox" aria-label="Standing of each power, from hostile to kindred">
+      <div class="axis" aria-hidden="true"><span></span><span><span>−100 hostile</span><span>0</span><span>kindred +100</span></span><span style="text-align:right">score</span></div>
+    </div>
     <div class="diplo">
-      <div>
-        <div class="filters" role="group" aria-label="Filter by standing" id="filters"></div>
-        <div class="rel" id="rel" role="listbox" aria-label="Standing of each power, from hostile to kindred">
-          <div class="axis" aria-hidden="true"><span></span><span><span>−100 hostile</span><span>0</span><span>kindred +100</span></span><span style="text-align:right">score</span></div>
-        </div>
-        <details class="tbl"><summary>Show as a table</summary><table id="relTable"><thead><tr><th>Power</th><th>Standing</th><th>Score</th></tr></thead><tbody></tbody></table></details>
-        <p class="small muted" style="margin-top:.8rem">Scores are the Crown's own opinion. Colour follows the direction of feeling: red toward war, blue toward kinship, grey for powers that no longer exist. Figures are approximate.</p>
-      </div>
       <article class="dossier" id="dossier" aria-live="polite"></article>
+      <section class="intel" aria-labelledby="h-intel">
+        <div>
+          <p class="eyebrow">Intelligence file</p>
+          <h3 id="h-intel">Reports on <span id="intelFor">…</span></h3>
+          <p class="small muted" style="margin:.3rem 0 0">Record what the house has said or done in public, with a source. The file is kept only in this browser and is never published. Export it to keep a copy or move it to another device.</p>
+        </div>
+        <form id="intelForm" autocomplete="off">
+          <label>Date<input type="date" id="iDate" required></label>
+          <label>Kind<select id="iKind">
+            <option>Claim</option><option>Public statement</option><option>Schism</option><option>Titles &amp; honours</option><option>Legal</option><option>Wikipedia edit</option><option>Trial of Strength</option><option>Other</option>
+          </select></label>
+          <label class="wide">Report<textarea id="iText" required maxlength="4000" placeholder="What happened, and why it matters to the Crown"></textarea></label>
+          <label class="wide">Source link (optional)<input type="url" id="iSrc" placeholder="https://"></label>
+          <div class="acts"><button type="submit" class="solid">File the report</button><span class="small muted" id="iStatus" role="status"></span></div>
+        </form>
+        <div class="tools">
+          <input type="search" id="iFind" placeholder="Search the file" aria-label="Search the intelligence file">
+          <div class="btns"><button type="button" id="iExport">Export</button><button type="button" id="iImport">Import</button><input type="file" id="iFile" accept="application/json,.json" hidden></div>
+        </div>
+        <ul class="log" id="intelLog"></ul>
+      </section>
     </div>
   </section>
 
@@ -387,7 +419,6 @@ footer{padding-block:1.6rem 2.6rem;margin-top:16px;font-family:var(--mono);font-
   const STATIONS=[
     {name:'Tourtoirac, Dordogne',role:'The front · grave of the first false king',lat:45.27,lon:1.05},
     {name:'Temuco, Araucanía',role:'Mapuche lands · never to be claimed',lat:-38.74,lon:-72.60},
-    {name:'Sealand (HM Fort Roughs)',role:'Censured power · North Sea',lat:51.895,lon:1.482},
     {name:'Null Island (0°, 0°)',role:'Nearest point to nowhere',lat:0,lon:0}
   ];
   const list=$('stations');
@@ -453,58 +484,15 @@ footer{padding-block:1.6rem 2.6rem;margin-top:16px;font-family:var(--mono);font-
     {id:'arau',name:'Kingdom of Araucanía and Patagonia',short:'Araucanía & Patagonia',stance:'war',label:'At war',score:-100,
       founded:'17 Nov 1860',head:'Disputed between rival Princes',seat:'France, in exile',area:'Claims Mapuche lands in Chile and Argentina',pop:'None resident',rec:'0 states',titles:'Grants orders and titles',
       notes:['Founded by decrees of a French lawyer, Orélie-Antoine de Tounens, over lands of the Mapuche people.','Split since 2023 into rival councils, each calling the other imposters.','Declared its own name a registered trademark in January 2026.','Charged with six crimes, including Being French.'],
-      envoy:'The Crown awaits your champion at the bar, or your renunciation. Either will be received with gladness.'},
-    {id:'sealand',name:'Principality of Sealand',short:'Sealand',stance:'hostile',label:'Censured',score:-45,
-      founded:'2 Sep 1967',head:'Prince Michael, since 2012',seat:'HM Fort Roughs, North Sea',area:'One wartime sea fort',pop:'A caretaker or two',rec:'0 states',titles:'Sells lordships online',
-      notes:['A Second World War anti-aircraft platform off the Suffolk coast, occupied by the Bates family.','Admirably uninhabited before its founding, which the Crown respects.','Sells titles of nobility. Under Article IV of the Charter, whoever sells a title is not a king.'],
-      envoy:'The Crown commends your isolation and deplores your gift shop.'},
-    {id:'seborga',name:'Principality of Seborga',short:'Seborga',stance:'hostile',label:'Not recognised',score:-20,
-      founded:'Claims 954; revived 1963',head:'Elected Prince or Princess',seat:'Seborga, Liguria, Italy',area:'≈ 14 km²',pop:'≈ 300',rec:'0 states',titles:'Has its own nobility',
-      notes:['A hill village above the Riviera whose claim rests on a disputed medieval sale.','Claims land on which people plainly live. Article V forbids the Crown to recognise it.','Held in no personal ill will. The village is said to be lovely.'],
-      envoy:'The Crown cannot recognise you, but would visit for lunch.'},
-    {id:'bir',name:'Bir Tawil claimants',short:'Bir Tawil',stance:'watch',label:'Watched',score:-10,
-      founded:'Claims since 2014',head:'Dozens of self-declared kings',seat:'Between Egypt and Sudan',area:'≈ 2,060 km² of desert',pop:'None resident',rec:'0 states',titles:'Varies by king',
-      notes:['A tract of desert claimed by neither Egypt nor Sudan, and therefore by nearly everyone else.','More crowns per square kilometre than anywhere except the centre of the Earth.','Local herders use the land. The Crown watches claimants who forget this.'],
-      envoy:'The Crown notes that there are more of you than there are of your subjects.'},
-    {id:'liberland',name:'Free Republic of Liberland',short:'Liberland',stance:'neutral',label:'Neutral',score:10,
-      founded:'13 Apr 2015',head:'President Vít Jedlička',seat:'Gornja Siga, on the Danube',area:'≈ 7 km² of floodplain',pop:'None resident',rec:'0 states',titles:'No, it is a republic',
-      notes:['A pocket of riverbank between Croatia and Serbia, claimed by neither.','Claims only land on which nobody lives, which Article V can live with.','Access to the territory has usually been blocked by the Croatian police.'],
-      envoy:'The Crown salutes a fellow claimant of the unclaimed, and notes that ours is harder to reach.'},
-    {id:'molossia',name:'Republic of Molossia',short:'Molossia',stance:'friendly',label:'Cordial',score:40,
-      founded:'1977',head:'President Kevin Baugh',seat:'Near Dayton, Nevada',area:'A few acres of desert',pop:'About 30',rec:'0 states',titles:'Honorary only',
-      notes:['A family homestead in the Nevada desert with its own navy, postal service and currency.','Has been at war with East Germany since 1983. Casualties: none.','A fellow power at war with a state that does not quite exist. The Crown sees itself in this.'],
-      envoy:'From one bloodless war to another: greetings, and may your enemy never reunify.'},
-    {id:'ladonia',name:'Ladonia',short:'Ladonia',stance:'friendly',label:'Cordial',score:45,
-      founded:'2 Jun 1996',head:'Queen Carolyn I',seat:'Kullaberg, Sweden',area:'≈ 1 km² of shore',pop:'No residents; many citizens abroad',rec:'0 states',titles:'Grants titles',
-      notes:['Founded by the artist Lars Vilks around his driftwood sculpture Nimis, after a dispute with the county.','A nation that exists because of a work of art. The Crown understands entirely.','Like the Crown, its citizens all live somewhere else.'],
-      envoy:'One nation of absent citizens to another: the Crown sends its regards to the driftwood.'},
-    {id:'redonda',name:'Kingdom of Redonda',short:'Redonda',stance:'kin',label:'Kindred',score:65,
-      founded:'Legend of 1865',head:'Several rival Kings',seat:'An islet off Montserrat',area:'≈ 1.6 km² of rock',pop:'None',rec:'0 states',titles:'Literary dukedoms',
-      notes:['An uninhabited Caribbean rock whose crown passes among writers and their friends.','Has had rival Kings for decades, and has taken this with good humour.','Claims no one’s home. A kingdom of paper, as a kingdom ought to be.'],
-      envoy:'The Crown admires a kingdom that never pretended to be anything but a story.'},
-    {id:'kugel',name:'Republic of Kugelmugel',short:'Kugelmugel',stance:'kin',label:'Kindred',score:85,
-      founded:'c. 1976',head:'Founded by artist Edwin Lipburger',seat:'The Prater, Vienna',area:'One spherical house',pop:'None resident',rec:'0 states',titles:'None',
-      notes:['A ball-shaped house declared independent after a planning dispute with the Austrian authorities.','The only other spherical state known to the Crown.','Its territory is a sphere on the surface; Ours is a sphere at the centre. Between us, We have the Earth surrounded.'],
-      envoy:'Sphere to sphere: the Crown proposes a Union of Round Things.'},
-    {id:'hutt',name:'Principality of Hutt River',short:'Hutt River',stance:'dead',label:'Extinct',score:null,
-      founded:'21 Apr 1970',head:'None. Dissolved 2020.',seat:'Western Australia',area:'≈ 75 km² of farmland',pop:'Formerly a family',rec:'0 states',titles:'Formerly granted',
-      notes:['Founded by a wheat farmer in a dispute over grain quotas, and the most famous micronation of its day.','Dissolved in 2020 and its land sold, after its founder’s death.','The Crown lowers the flag. Everything built on land returns to the Demiurge.'],
-      envoy:'The Crown observes a minute of silence, which in the Realm is every minute.'}
+      envoy:'The Crown awaits your champion at the bar, or your renunciation. Either will be received with gladness.'}
   ];
-  const FILTERS=[['all','All'],['war','At war'],['hostile','Hostile'],['neutral','Neutral'],['friendly','Friendly'],['kin','Kindred'],['dead','Extinct']];
-  const group=s=>s==='watch'?'neutral':s;
   const tagCls=s=>({war:'war',hostile:'war',watch:'pending',neutral:'pending',friendly:'kin',kin:'kin',dead:'dead'}[s]);
-  let current='all', selected='arau';
+  let selected=POWERS[0].id;
   const rel=$('rel'), tip=$('tip');
-
-  $('filters').innerHTML=FILTERS.map(([k,l])=>'<button type="button" data-f="'+k+'" aria-pressed="'+(k==='all')+'">'+l+'</button>').join('');
-  $('filters').addEventListener('click',e=>{const b=e.target.closest('button');if(!b)return;current=b.dataset.f;
-    [...$('filters').children].forEach(x=>x.setAttribute('aria-pressed',x===b));drawRel();});
 
   function drawRel(){
     [...rel.querySelectorAll('.relrow')].forEach(n=>n.remove());
-    const shown=POWERS.filter(p=>current==='all'||group(p.stance)===current);
-    shown.forEach(p=>{
+    POWERS.forEach(p=>{
       const b=document.createElement('button');b.type='button';b.className='relrow';b.setAttribute('role','option');b.dataset.id=p.id;
       b.setAttribute('aria-selected',p.id===selected);
       let fill;
@@ -512,15 +500,13 @@ footer{padding-block:1.6rem 2.6rem;margin-top:16px;font-family:var(--mono);font-
       else if(p.score<0) fill='<span class="fill neg" style="left:'+(50+p.score/2)+'%;width:'+(-p.score/2)+'%"></span>';
       else fill='<span class="fill pos" style="left:50%;width:'+(p.score/2)+'%"></span>';
       b.innerHTML='<span class="nm">'+esc(p.short)+'</span><span class="track">'+fill+'</span><span class="sc">'+(p.score===null?'—':(p.score>0?'+':'')+p.score)+'</span>';
-      b.addEventListener('click',()=>{selected=p.id;drawRel();drawDossier();});
+      b.addEventListener('click',()=>{selected=p.id;drawRel();drawDossier();drawIntel();});
       b.addEventListener('mousemove',e=>{tip.style.display='block';tip.innerHTML='<b>'+esc(p.short)+'</b><br>'+esc(p.label)+' · '+(p.score===null?'no longer exists':'score '+(p.score>0?'+':'')+p.score);
         tip.style.left=Math.min(e.clientX+14,innerWidth-270)+'px';tip.style.top=(e.clientY+14)+'px';});
       b.addEventListener('mouseleave',()=>{tip.style.display='none';});
       rel.append(b);
     });
-    if(!shown.length) rel.insertAdjacentHTML('beforeend','<p class="relrow muted small" style="cursor:default">No powers in this standing.</p>');
   }
-  $('relTable').querySelector('tbody').innerHTML=POWERS.map(p=>'<tr><td>'+esc(p.name)+'</td><td>'+esc(p.label)+'</td><td>'+(p.score===null?'—':p.score)+'</td></tr>').join('');
 
   function drawDossier(){
     const p=POWERS.find(x=>x.id===selected), el=$('dossier');
@@ -529,13 +515,66 @@ footer{padding-block:1.6rem 2.6rem;margin-top:16px;font-family:var(--mono);font-
     el.innerHTML='<div class="head"><h3>'+esc(p.name)+'</h3><span class="tag '+tagCls(p.stance)+'">'+esc(p.label)+'</span></div>'+
       '<dl class="stats">'+stat('Founded',p.founded)+stat('Head of state',p.head)+stat('Seat',p.seat)+stat('Territory',p.area)+stat('Population',p.pop)+stat('Recognised by',p.rec)+stat('Titles',p.titles)+
       stat('Standing',p.score===null?'—':(p.score>0?'+':'')+p.score)+stat('Threat to Realm','None. Nothing is.')+'</dl>'+
-      '<div><p class="eyebrow">Intelligence</p><ul>'+p.notes.map(n=>'<li>'+esc(n)+'</li>').join('')+'</ul></div>'+
+      '<div><p class="eyebrow">Standing intelligence</p><ul>'+p.notes.map(n=>'<li>'+esc(n)+'</li>').join('')+'</ul></div>'+
       (p.id==='arau'?'<p class="small" style="margin:0">Days until forfeit: <b class="mono">'+Math.max(0,Math.ceil((FORFEIT-Date.now())/DAY))+'</b> · <a href="war.html#sinners">Read the charges</a></p>':'')+
       '<div><p class="eyebrow">Draft communiqué</p><p class="envoy muted" id="envoy">Awaiting the royal seal.</p><div style="margin-top:.6rem"><button type="button" id="seal">Seal the communiqué</button></div>'+
       '<p class="small muted" style="margin:.5rem 0 0">Communiqués are sealed and filed in the Realm. None is ever sent: the Articles of War forbid contacting anyone.</p></div>';
     $('seal').addEventListener('click',()=>{$('envoy').classList.remove('muted');$('envoy').textContent='“'+p.envoy+'” — Aaron R.';$('seal').textContent='Sealed and filed';$('seal').disabled=true;});
   }
-  drawRel(); drawDossier();
+
+  /* Intelligence file: kept in this browser only */
+  const KEY='kur-intel-v1';
+  let intel={};
+  try{intel=JSON.parse(localStorage.getItem(KEY)||'{}')||{};}catch(e){intel={};}
+  const saved=()=>{try{localStorage.setItem(KEY,JSON.stringify(intel));return true;}catch(e){return false;}};
+  const entries=()=>(intel[selected]=intel[selected]||[]);
+  const iso=d=>new Date(d.getTime()-d.getTimezoneOffset()*6e4).toISOString().slice(0,10);
+  $('iDate').value=iso(new Date());
+  const safeUrl=u=>/^https?:\/\//i.test(u||'')?u:'';
+
+  function drawIntel(){
+    const p=POWERS.find(x=>x.id===selected);
+    $('intelFor').textContent=p.short;
+    const q=$('iFind').value.trim().toLowerCase();
+    const list=entries().slice().sort((a,b)=>b.date.localeCompare(a.date)||b.added-a.added)
+      .filter(e=>!q||(e.text+' '+e.kind+' '+(e.source||'')).toLowerCase().includes(q));
+    $('intelLog').innerHTML=list.length?list.map(e=>{const u=safeUrl(e.source);
+      return '<li><div class="meta"><span class="kind">'+esc(e.kind)+'</span><span>'+new Date(e.date+'T12:00').toLocaleDateString('en-GB',{day:'numeric',month:'short',year:'numeric'})+'</span>'+
+        '<button type="button" class="del" data-id="'+esc(e.id)+'">Strike from file</button></div>'+
+        '<div class="txt">'+esc(e.text)+'</div>'+(u?'<a class="src" href="'+esc(u)+'" rel="noopener noreferrer" target="_blank">'+esc(u)+'</a>':'')+'</li>';}).join('')
+      :'<li class="empty">'+(q?'Nothing in the file matches.':'No reports filed yet.')+'</li>';
+  }
+  $('intelForm').addEventListener('submit',e=>{
+    e.preventDefault();
+    const text=$('iText').value.trim(); if(!text) return;
+    entries().push({id:Date.now().toString(36)+Math.random().toString(36).slice(2,6),date:$('iDate').value||iso(new Date()),kind:$('iKind').value,text,source:$('iSrc').value.trim(),added:Date.now()});
+    $('iStatus').textContent=saved()?'Filed.':'Filed for this visit only: this browser will not keep it. Export before you leave.';
+    $('iText').value='';$('iSrc').value='';drawIntel();
+  });
+  $('intelLog').addEventListener('click',e=>{const b=e.target.closest('.del');if(!b)return;
+    if(!confirm('Strike this report from the file?'))return;
+    intel[selected]=entries().filter(x=>x.id!==b.dataset.id);saved();drawIntel();});
+  $('iFind').addEventListener('input',drawIntel);
+  $('iExport').addEventListener('click',()=>{
+    const blob=new Blob([JSON.stringify({kingdom:'Kur ĝešgigal',exported:new Date().toISOString(),intel},null,2)],{type:'application/json'});
+    const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='kur-intelligence-'+iso(new Date())+'.json';
+    document.body.append(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(a.href),1000);
+    $('iStatus').textContent='Exported.';
+  });
+  $('iImport').addEventListener('click',()=>$('iFile').click());
+  $('iFile').addEventListener('change',()=>{
+    const f=$('iFile').files[0]; if(!f) return;
+    f.text().then(t=>{
+      const src=(JSON.parse(t)||{}).intel||{}; let n=0;
+      for(const [pid,arr] of Object.entries(src)){ if(!Array.isArray(arr)) continue;
+        const have=new Set((intel[pid]=intel[pid]||[]).map(x=>x.id));
+        for(const e of arr){ if(e&&e.id&&typeof e.text==='string'&&!have.has(e.id)){
+          intel[pid].push({id:String(e.id),date:/^\d{4}-\d{2}-\d{2}$/.test(e.date)?e.date:iso(new Date()),kind:String(e.kind||'Other'),text:e.text,source:String(e.source||''),added:+e.added||Date.now()});n++;}}}
+      saved();drawIntel();$('iStatus').textContent=n+' report'+(n===1?'':'s')+' imported.';
+    }).catch(()=>{$('iStatus').textContent='That file could not be read.';}).finally(()=>{$('iFile').value='';});
+  });
+
+  drawRel(); drawDossier(); drawIntel();
 })();
 </script>
 </body>

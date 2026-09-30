@@ -1,0 +1,542 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Throne Room · Kur ĝešgigal</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Unicase:wght@400;600&family=Spectral:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+/* Layout: the King's desk. A dense desktop grid of panels in the lapis-and-gold of the Register; collapses to one column on small screens. */
+:root{
+  --bg:#0f1a3a; --panel:#152450; --panel2:#1a2b5e; --ink:#ece7d8; --muted:#a8b0c9; --gold:#d8b155; --rule:#29396b; --lapis:#8aa6ff;
+  --mantle:#3b4a7a; --outer:#c9822f; --inner:#e9c46a; --seal:#e0685a;
+  --hostile:#e0685a; --friendly:#6f8fef; --neutral:#6b7596;
+  --display:"Cormorant Unicase", "Cormorant", Georgia, serif;
+  --body:"Spectral", "Iowan Old Style", Georgia, serif;
+  --mono:"IBM Plex Mono", ui-monospace, Menlo, Consolas, monospace;
+  color-scheme:dark;
+}
+@media (prefers-color-scheme: light){ :root:not([data-theme="dark"]){
+  --bg:#eef0f5; --panel:#ffffff; --panel2:#f5f6fa; --ink:#14203f; --muted:#56607c; --gold:#946d1c; --rule:#d2d8e6; --lapis:#2b4aa8;
+  --mantle:#b9c3de; --outer:#d58a36; --inner:#e6b94d; --seal:#a8322a;
+  --hostile:#a8322a; --friendly:#2b4aa8; --neutral:#9aa3bb; color-scheme:light } }
+:root[data-theme="light"]{
+  --bg:#eef0f5; --panel:#ffffff; --panel2:#f5f6fa; --ink:#14203f; --muted:#56607c; --gold:#946d1c; --rule:#d2d8e6; --lapis:#2b4aa8;
+  --mantle:#b9c3de; --outer:#d58a36; --inner:#e6b94d; --seal:#a8322a;
+  --hostile:#a8322a; --friendly:#2b4aa8; --neutral:#9aa3bb; color-scheme:light }
+
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--body);font-size:16px;line-height:1.5;padding:0 16px}
+a{color:var(--lapis);text-underline-offset:2px}
+a:focus-visible,button:focus-visible,select:focus-visible,[tabindex]:focus-visible{outline:2px solid var(--gold);outline-offset:2px}
+.wrap{max-width:92rem;margin-inline:auto}
+
+header.top{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:1rem 2rem;padding-block:1.4rem 1rem;border-bottom:3px double var(--rule)}
+.brand{display:flex;align-items:center;gap:.9rem;min-width:0}
+.brand img{width:3.4rem;height:auto;flex:none}
+.brand .kicker{font-family:var(--mono);font-size:.7rem;letter-spacing:.14em;text-transform:uppercase;color:var(--gold);margin:0}
+.brand h1{font-family:var(--display);font-weight:600;font-size:clamp(1.7rem,3.4vw,2.5rem);line-height:1;margin:.1rem 0 0}
+.clocks{display:flex;flex-wrap:wrap;gap:.4rem 1.6rem;font-family:var(--mono);font-size:.8rem;color:var(--muted)}
+.clocks b{display:block;font-weight:500;font-size:1.15rem;color:var(--ink);font-variant-numeric:tabular-nums}
+nav.bar{display:flex;flex-wrap:wrap;gap:.3rem 1.2rem;padding-block:.55rem;border-bottom:1px solid var(--rule)}
+nav.bar a{font-family:var(--display);font-weight:600;font-size:1.02rem;text-decoration:none;color:var(--ink)}
+nav.bar a:hover,nav.bar a[aria-current="page"]{color:var(--gold)}
+
+.eyebrow{font-family:var(--mono);font-size:.68rem;letter-spacing:.12em;text-transform:uppercase;color:var(--gold);margin:0 0 .3rem}
+h2{font-family:var(--display);font-weight:600;font-size:1.45rem;line-height:1.1;margin:0 0 .8rem}
+h3{font-family:var(--display);font-weight:600;font-size:1.15rem;line-height:1.15;margin:0}
+p{margin:0 0 .7rem}
+.muted{color:var(--muted)}
+.small{font-size:.85rem}
+.mono{font-family:var(--mono)}
+
+.kpis{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:12px;margin-block:16px}
+.kpi{background:var(--panel);border:1px solid var(--rule);padding:.8rem .9rem;min-width:0}
+.kpi .l{font-family:var(--mono);font-size:.66rem;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);display:block}
+.kpi .v{font-family:var(--display);font-weight:600;font-size:2.1rem;line-height:1.1;font-variant-numeric:tabular-nums;display:block}
+.kpi .s{font-size:.8rem;color:var(--muted);display:block}
+@media (max-width:1100px){.kpis{grid-template-columns:repeat(3,minmax(0,1fr))}}
+@media (max-width:560px){.kpis{grid-template-columns:repeat(2,minmax(0,1fr))}}
+
+.grid{display:grid;grid-template-columns:repeat(12,minmax(0,1fr));gap:16px;align-items:start}
+.panel{background:var(--panel);border:1px solid var(--rule);padding:1rem 1.1rem 1.1rem;min-width:0}
+.c4{grid-column:span 4}.c5{grid-column:span 5}.c7{grid-column:span 7}.c8{grid-column:span 8}.c12{grid-column:span 12}
+.col{display:grid;gap:16px;min-width:0}
+@media (max-width:1100px){.c4,.c5,.c7,.c8{grid-column:span 12}}
+
+/* Territories */
+.terr{border:1px solid var(--rule);background:var(--panel2);padding:.8rem .9rem;display:grid;gap:.6rem}
+.terr + .terr{margin-top:12px}
+.terr .head{display:flex;justify-content:space-between;align-items:baseline;gap:.5rem;flex-wrap:wrap}
+.tag{font-family:var(--mono);font-size:.64rem;letter-spacing:.08em;text-transform:uppercase;border:1px solid currentColor;padding:.02rem .4rem;border-radius:2px;white-space:nowrap}
+.tag.held{color:var(--gold)} .tag.pending{color:var(--lapis)} .tag.war{color:var(--hostile)} .tag.kin{color:var(--friendly)} .tag.dead{color:var(--muted)}
+.wx{display:grid;grid-template-columns:auto 1fr;gap:.9rem;align-items:center}
+.wx .big{font-family:var(--display);font-weight:600;font-size:2.6rem;line-height:1;font-variant-numeric:tabular-nums}
+.facts{margin:0;display:grid;grid-template-columns:auto 1fr;gap:.2rem .8rem;align-items:baseline;font-size:.9rem}
+.facts dt{font-family:var(--mono);font-size:.66rem;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+.facts dd{margin:0;font-variant-numeric:tabular-nums}
+.fc{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:4px;list-style:none;margin:0;padding:0}
+.fc li{background:var(--panel);border:1px solid var(--rule);text-align:center;padding:.3rem .1rem;font-family:var(--mono);font-size:.68rem;color:var(--muted)}
+.fc b{display:block;color:var(--ink);font-weight:500;font-size:.78rem}
+.realmfig{width:4.4rem;height:4.4rem;flex:none}
+.realmfig .mantle{fill:var(--mantle)} .realmfig .outer{fill:var(--outer)} .realmfig .inner{fill:var(--inner)} .realmfig .dot{fill:var(--seal)}
+button{font-family:var(--display);font-weight:600;font-size:.98rem;padding:.3rem .75rem;border-radius:2px;cursor:pointer;border:1px solid var(--gold);background:transparent;color:var(--gold)}
+button.solid{background:var(--gold);color:var(--bg)}
+button[aria-pressed="true"]{background:var(--gold);color:var(--bg)}
+
+/* Surface weather */
+.stations{list-style:none;margin:0;padding:0;display:grid;gap:10px}
+.st{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:.2rem 1rem;border-bottom:1px solid var(--rule);padding-bottom:.6rem}
+.st:last-child{border-bottom:0;padding-bottom:0}
+.st .name{font-family:var(--display);font-weight:600;font-size:1.08rem}
+.st .role{font-family:var(--mono);font-size:.64rem;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);display:block}
+.st .now{text-align:right;font-variant-numeric:tabular-nums}
+.st .now b{font-family:var(--display);font-size:1.6rem;font-weight:600;line-height:1}
+.st .days{grid-column:1/-1;display:flex;gap:.9rem;font-family:var(--mono);font-size:.7rem;color:var(--muted);flex-wrap:wrap}
+.st .days span b{color:var(--ink);font-weight:500}
+
+/* Seismic */
+.quakes{list-style:none;margin:0;padding:0;display:grid;gap:.45rem}
+.quakes li{display:grid;grid-template-columns:3rem minmax(0,1fr) auto;gap:.6rem;align-items:baseline;font-size:.88rem}
+.quakes .m{font-family:var(--mono);font-weight:500;color:var(--gold)}
+.quakes .t{font-family:var(--mono);font-size:.7rem;color:var(--muted);white-space:nowrap}
+.quakes .p{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+
+/* Lists */
+.rows{list-style:none;margin:0;padding:0;display:grid;gap:.5rem}
+.rows li{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:.8rem;align-items:baseline;border-bottom:1px solid var(--rule);padding-bottom:.45rem;font-size:.9rem}
+.rows li:last-child{border-bottom:0}
+.rows .d{font-family:var(--mono);font-size:.72rem;color:var(--muted);white-space:nowrap;font-variant-numeric:tabular-nums}
+.rows .d b{color:var(--gold);font-weight:500}
+.tally{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:.6rem 1rem;margin:0}
+.tally div{border-left:2px solid var(--rule);padding-left:.6rem}
+.tally dt{font-family:var(--mono);font-size:.64rem;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+.tally dd{margin:0;font-family:var(--display);font-weight:600;font-size:1.4rem;font-variant-numeric:tabular-nums}
+.meter{height:6px;background:var(--rule);border-radius:3px;overflow:hidden;margin-top:.3rem}
+.meter i{display:block;height:100%;background:var(--gold);border-radius:3px}
+
+/* Diplomacy */
+.diplo{display:grid;grid-template-columns:minmax(0,1.05fr) minmax(0,1fr);gap:18px}
+@media (max-width:1000px){.diplo{grid-template-columns:1fr}}
+.filters{display:flex;flex-wrap:wrap;gap:.4rem;margin-bottom:.8rem}
+.filters button{font-size:.88rem;padding:.2rem .6rem}
+.rel{display:grid;gap:2px}
+.rel .axis{display:grid;grid-template-columns:11rem minmax(0,1fr) 3.2rem;font-family:var(--mono);font-size:.62rem;color:var(--muted);letter-spacing:.06em;text-transform:uppercase;padding-bottom:.2rem}
+.rel .axis span:nth-child(2){display:flex;justify-content:space-between}
+.relrow{display:grid;grid-template-columns:11rem minmax(0,1fr) 3.2rem;align-items:center;gap:0;padding:.28rem .3rem;border:1px solid transparent;border-radius:2px;cursor:pointer;background:none;color:inherit;text-align:left;font:inherit;width:100%}
+.relrow:hover{background:var(--panel2)}
+.relrow[aria-selected="true"]{border-color:var(--gold);background:var(--panel2)}
+.relrow .nm{font-size:.9rem;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;padding-right:.6rem}
+.relrow .track{position:relative;height:14px}
+.relrow .track::before{content:"";position:absolute;left:50%;top:-4px;bottom:-4px;width:1px;background:var(--muted);opacity:.6}
+.relrow .fill{position:absolute;top:2px;height:10px}
+.relrow .fill.neg{background:var(--hostile);border-radius:4px 0 0 4px}
+.relrow .fill.pos{background:var(--friendly);border-radius:0 4px 4px 0}
+.relrow .fill.none{left:calc(50% - 2px);width:4px;background:var(--neutral);border-radius:2px}
+.relrow .sc{font-family:var(--mono);font-size:.76rem;text-align:right;font-variant-numeric:tabular-nums}
+.dossier{background:var(--panel2);border:1px solid var(--rule);border-top:3px solid var(--gold);padding:1rem 1.1rem;display:grid;gap:.8rem;align-content:start}
+.dossier.war{border-top-color:var(--hostile)}
+.dossier .head{display:flex;justify-content:space-between;gap:.6rem;flex-wrap:wrap;align-items:baseline}
+.dossier h3{font-size:1.45rem}
+.dossier .stats{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:.6rem}
+.dossier .stats div{background:var(--panel);border:1px solid var(--rule);padding:.45rem .55rem;min-width:0}
+.dossier .stats dt{font-family:var(--mono);font-size:.6rem;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+.dossier .stats dd{margin:0;font-size:.92rem;font-variant-numeric:tabular-nums}
+@media (max-width:560px){.dossier .stats{grid-template-columns:repeat(2,minmax(0,1fr))}.rel .axis,.relrow{grid-template-columns:7.5rem minmax(0,1fr) 2.6rem}}
+.dossier ul{margin:0;padding-left:1.1rem;font-size:.92rem}
+.dossier ul li{margin-bottom:.25rem}
+.envoy{font-style:italic;border-left:2px solid var(--gold);padding-left:.8rem;margin:0;font-size:.95rem;min-height:1.5em}
+#tip{position:fixed;pointer-events:none;z-index:20;background:var(--bg);border:1px solid var(--rule);padding:.35rem .55rem;font-size:.8rem;box-shadow:0 4px 16px rgba(0,0,0,.3);display:none;max-width:16rem}
+#tip b{font-family:var(--mono);font-weight:500}
+details.tbl summary{cursor:pointer;font-family:var(--mono);font-size:.72rem;color:var(--muted);margin-top:.8rem}
+details.tbl table{width:100%;border-collapse:collapse;font-size:.82rem;margin-top:.4rem}
+details.tbl th,details.tbl td{text-align:left;padding:.2rem .4rem;border-bottom:1px solid var(--rule)}
+details.tbl td:last-child,details.tbl th:last-child{text-align:right;font-family:var(--mono)}
+
+footer{padding-block:1.6rem 2.6rem;margin-top:16px;font-family:var(--mono);font-size:.72rem;color:var(--muted);line-height:1.6;border-top:3px double var(--rule)}
+.nojs{display:none}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<header class="top">
+  <div class="brand">
+    <img src="flag.png" alt="Flag of Kur ĝešgigal" width="780" height="515">
+    <div><p class="kicker">Kingdom of Kur ĝešgigal · Private Office of the King</p><h1>The Throne Room</h1></div>
+  </div>
+  <div class="clocks" aria-live="off">
+    <span>Still Point time (UTC)<b id="clkUtc">--:--:--</b></span>
+    <span>The King's local time<b id="clkLocal">--:--:--</b></span>
+    <span>Day of the reign<b id="clkDay">…</b></span>
+  </div>
+</header>
+<nav class="bar" aria-label="Site">
+  <a href="index.html#realm">The Realm</a>
+  <a href="index.html#charter">Charter</a>
+  <a href="index.html#patent">Letters Patent</a>
+  <a href="war.html">Declaration of War</a>
+  <a href="dashboard.html" aria-current="page">Throne Room</a>
+</nav>
+
+<section class="kpis" aria-label="State of the Realm">
+  <div class="kpi"><span class="l">Days until forfeit</span><span class="v" id="kForfeit">…</span><span class="s">Araucanía &amp; Patagonia, 1 Jan 2027</span></div>
+  <div class="kpi"><span class="l">Challengers at the bar</span><span class="v">0</span><span class="s">Trial of Strength unanswered</span></div>
+  <div class="kpi"><span class="l">Wars in progress</span><span class="v">1</span><span class="s">Casualties to date: 0</span></div>
+  <div class="kpi"><span class="l">Resident population</span><span class="v">0</span><span class="s">Citizens reside abroad</span></div>
+  <div class="kpi"><span class="l">Royal treasury</span><span class="v">£0.00</span><span class="s">No titles sold, as is proper</span></div>
+  <div class="kpi"><span class="l">Invasions of the Realm</span><span class="v">0</span><span class="s">Ever. Nor shall there be.</span></div>
+</section>
+
+<div class="grid">
+
+  <!-- Column 1: Territories -->
+  <div class="col c4">
+    <section class="panel" aria-labelledby="h-terr">
+      <p class="eyebrow">Claimed territories</p>
+      <h2 id="h-terr">Dominions of the Crown</h2>
+
+      <article class="terr">
+        <div class="head"><h3>The Realm (the Still Point)</h3><span class="tag held">Held</span></div>
+        <div class="wx">
+          <svg class="realmfig" viewBox="0 0 100 100" aria-hidden="true">
+            <circle class="mantle" cx="50" cy="50" r="48"/><circle class="outer" cx="50" cy="50" r="26"/><circle class="inner" cx="50" cy="50" r="9.2"/><circle class="dot" cx="50" cy="50" r="2"/>
+          </svg>
+          <div><span class="big">5,400 °C</span><div class="muted small">Solid. Dark. Utterly still.</div></div>
+        </div>
+        <dl class="facts">
+          <dt>Pressure</dt><dd>≈ 360 GPa (3.5 million atm)</dd>
+          <dt>Wind</dt><dd>0 km/h, from no direction</dd>
+          <dt>Precipitation</dt><dd>None. The iron is already down.</dd>
+          <dt>Humidity</dt><dd>0%</dd>
+          <dt>Visibility</dt><dd>0 m. No light has ever arrived.</dd>
+          <dt>Gravity</dt><dd>0 g. Every direction pulls equally.</dd>
+          <dt>Sunrise · sunset</dt><dd>Never · never</dd>
+          <dt>Volume</dt><dd>π cm³ (radius ≈ 0.909 cm)</dd>
+          <dt>Depth</dt><dd>6,371 km, mean</dd>
+        </dl>
+        <div>
+          <p class="eyebrow" style="margin-bottom:.3rem">Seven-day forecast</p>
+          <ul class="fc" id="realmFc"></ul>
+        </div>
+        <p class="small muted" style="margin:0">Long-range outlook: the inner core grows by roughly a millimetre a year. The Realm will remain solid for the foreseeable eternity.</p>
+      </article>
+
+      <article class="terr">
+        <div class="head"><h3>Province of Araucanía &amp; Patagonia</h3><span class="tag pending">Pending forfeit</span></div>
+        <dl class="facts">
+          <dt>Status</dt><dd>Passes to the Crown on 1 Jan 2027 if no claimant takes the bar</dd>
+          <dt>Land area</dt><dd>0 km², by Article V</dd>
+          <dt>Consists of</dt><dd>The title alone, which weighs nothing</dd>
+          <dt>Land claims</dt><dd>All dissolved on annexation</dd>
+          <dt>Days remaining</dt><dd id="provDays">…</dd>
+        </dl>
+        <div class="meter" role="img" id="provBarWrap" aria-label="Time elapsed toward forfeit"><i id="provBar" style="width:0"></i></div>
+      </article>
+
+      <article class="terr">
+        <div class="head"><h3>Distance to the Throne</h3><span class="tag held">Straight down</span></div>
+        <p style="margin:0"><span class="big mono" style="font-size:1.6rem" id="distKm">≈ 6,371 km</span></p>
+        <p class="small muted" style="margin:0" id="distNote">Mean radius of the Earth. Every point on the surface lies directly above the Realm. Share your position to measure your own descent.</p>
+        <div><button type="button" id="locate">Measure from here</button></div>
+      </article>
+    </section>
+  </div>
+
+  <!-- Column 2: Surface watch & seismic -->
+  <div class="col c4">
+    <section class="panel" aria-labelledby="h-wx">
+      <p class="eyebrow">Surface watch · live</p>
+      <h2 id="h-wx">Weather above the Realm</h2>
+      <p class="small muted">The Realm has no weather. These are the conditions on the surface of places that concern the Crown, from Open-Meteo.</p>
+      <ul class="stations" id="stations"></ul>
+      <p class="small muted" id="wxStatus" role="status" style="margin:.6rem 0 0"></p>
+    </section>
+
+    <section class="panel" aria-labelledby="h-quake">
+      <p class="eyebrow">Seismic couriers · live</p>
+      <h2 id="h-quake">Dispatches reaching the Realm</h2>
+      <p class="small muted">Earthquake waves are the only messengers that ever reach the Still Point. P-waves from each tremor below arrive at the Realm in about ten minutes. Past 24 hours, magnitude 4.5 and above, from the USGS.</p>
+      <ul class="quakes" id="quakes"><li class="muted small">Listening to the rock…</li></ul>
+    </section>
+
+    <section class="panel" aria-labelledby="h-sky">
+      <p class="eyebrow">The heavens</p>
+      <h2 id="h-sky">Above the Hebdomad</h2>
+      <dl class="facts">
+        <dt>Moon</dt><dd id="moon">…</dd>
+        <dt>Visible from Realm</dt><dd>No. Nothing is.</dd>
+        <dt>Archons overhead</dt><dd>Seven, as ever</dd>
+        <dt>Distance to Sun</dt><dd id="sunDist">…</dd>
+      </dl>
+    </section>
+  </div>
+
+  <!-- Column 3: War room, calendar, decrees -->
+  <div class="col c4">
+    <section class="panel" aria-labelledby="h-war">
+      <p class="eyebrow">War room</p>
+      <h2 id="h-war">The first front</h2>
+      <p class="small">At war with <strong>the False Kingdom of Araucanía and Patagonia</strong>, in all its factions. <a href="war.html">Declaration</a></p>
+      <dl class="tally">
+        <div><dt>Casualties</dt><dd>0</dd></div>
+        <div><dt>Territory changed hands</dt><dd>None</dd></div>
+        <div><dt>Charges laid</dt><dd>6</dd></div>
+        <div><dt>Weapons</dt><dd class="small" style="font-size:1rem">Dates, sources, laughter</dd></div>
+        <div><dt>Enemy recognised by</dt><dd>0 states</dd></div>
+        <div><dt>Rival enemy Princes</dt><dd>2 or more</dd></div>
+      </dl>
+      <p class="eyebrow" style="margin-top:1rem">Trial of Strength</p>
+      <p class="small muted" style="margin:0">Squat, bench press, deadlift. IPF GL points. Proceeds to an organisation led by the Mapuche people. Entries close 1 January 2027.</p>
+    </section>
+
+    <section class="panel" aria-labelledby="h-cal">
+      <p class="eyebrow">Court calendar</p>
+      <h2 id="h-cal">Coming before the Crown</h2>
+      <ul class="rows" id="calendar"></ul>
+    </section>
+
+
+    <section class="panel" aria-labelledby="h-dec">
+      <p class="eyebrow">The Register</p>
+      <h2 id="h-dec">Acts of the Crown</h2>
+      <ul class="rows">
+        <li><span>Proclamation of the Court of King Aaron I</span><span class="d">29 Sep 2026</span></li>
+        <li><span>Royal Ordinance No. 2: Trial of Strength</span><span class="d">29 Sep 2026</span></li>
+        <li><span>Founding Charter of Kur ĝešgigal</span><span class="d">29 Sep 2026</span></li>
+        <li><span>Proclamation No. 1: Declaration of War</span><span class="d">29 Sep 2026</span></li>
+        <li><span>Terms of forfeit: annexation of the Crown</span><span class="d">29 Sep 2026</span></li>
+        <li><span>The flag of Kur ĝešgigal raised</span><span class="d">30 Sep 2026</span></li>
+        <li><span>The Throne Room opened</span><span class="d">30 Sep 2026</span></li>
+      </ul>
+    </section>
+  </div>
+
+  <!-- Diplomacy -->
+  <section class="panel c12" aria-labelledby="h-dip" id="diplomacy">
+    <p class="eyebrow">Foreign office</p>
+    <h2 id="h-dip">Diplomacy: the other crowns of the Earth</h2>
+    <div class="diplo">
+      <div>
+        <div class="filters" role="group" aria-label="Filter by standing" id="filters"></div>
+        <div class="rel" id="rel" role="listbox" aria-label="Standing of each power, from hostile to kindred">
+          <div class="axis" aria-hidden="true"><span></span><span><span>−100 hostile</span><span>0</span><span>kindred +100</span></span><span style="text-align:right">score</span></div>
+        </div>
+        <details class="tbl"><summary>Show as a table</summary><table id="relTable"><thead><tr><th>Power</th><th>Standing</th><th>Score</th></tr></thead><tbody></tbody></table></details>
+        <p class="small muted" style="margin-top:.8rem">Scores are the Crown's own opinion. Colour follows the direction of feeling: red toward war, blue toward kinship, grey for powers that no longer exist. Figures are approximate.</p>
+      </div>
+      <article class="dossier" id="dossier" aria-live="polite"></article>
+    </div>
+  </section>
+
+</div>
+
+<footer>
+  <p>The Kingdom of Kur ĝešgigal is a work of satire by Aaron Clews. It is not a state, holds no land, collects no money and sells no titles. The diplomatic opinions above are jokes about institutions, not about any person; the Articles of War forbid contacting or harassing anyone. Live data from Open-Meteo and the United States Geological Survey. The Kingdom does not speak for the Mapuche people.</p>
+</footer>
+</div>
+<div id="tip" role="tooltip"></div>
+
+<script>
+(function(){
+  const $=id=>document.getElementById(id);
+  const FOUNDED=Date.UTC(2026,8,29), FORFEIT=Date.UTC(2027,0,1), DAY=864e5;
+  const fmt=n=>n.toLocaleString('en-GB');
+  const esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+
+  /* Clocks */
+  function tick(){
+    const now=new Date();
+    $('clkUtc').textContent=now.toISOString().slice(11,19);
+    $('clkLocal').textContent=now.toLocaleTimeString('en-GB');
+    const day=Math.floor((now-FOUNDED)/DAY)+1;
+    $('clkDay').textContent=day>0?fmt(day):'Not yet';
+    const left=Math.ceil((FORFEIT-now)/DAY);
+    $('kForfeit').textContent=left>0?left:'Forfeit';
+    $('provDays').textContent=left>0?left+' days':'Forfeited. The Province is the Crown’s.';
+    const pct=Math.min(100,Math.max(0,(now-FOUNDED)/(FORFEIT-FOUNDED)*100));
+    $('provBar').style.width=pct.toFixed(1)+'%';
+    $('provBarWrap').setAttribute('aria-label',pct.toFixed(0)+'% of the time to forfeit has elapsed');
+  }
+  tick(); setInterval(tick,1000);
+
+  /* Realm forecast: identical, forever */
+  const fc=$('realmFc'), today=new Date();
+  for(let i=0;i<7;i++){const d=new Date(today.getTime()+i*DAY);
+    fc.insertAdjacentHTML('beforeend','<li>'+d.toLocaleDateString('en-GB',{weekday:'short'})+'<b>5,400°</b>solid</li>');}
+
+  /* Distance to throne: geocentric radius at the King's latitude (WGS84) */
+  $('locate').addEventListener('click',()=>{
+    if(!navigator.geolocation){$('distNote').textContent='This device cannot tell where it is. The Throne is still straight down.';return;}
+    $('distNote').textContent='Consulting the heavens…';
+    navigator.geolocation.getCurrentPosition(p=>{
+      const a=6378.137,b=6356.752,φ=p.coords.latitude*Math.PI/180,c=Math.cos(φ),s=Math.sin(φ);
+      let r=Math.sqrt(((a*a*c)**2+(b*b*s)**2)/((a*c)**2+(b*s)**2));
+      const alt=(p.coords.altitude||0)/1000; r+=alt;
+      $('distKm').textContent=r.toLocaleString('en-GB',{minimumFractionDigits:1,maximumFractionDigits:1})+' km';
+      $('distNote').textContent='From your position at '+p.coords.latitude.toFixed(2)+'°, straight down. Nobody has ever gone further than about 12 km of it.';
+      addStation({name:'Your position',role:'Directly above the Realm',lat:p.coords.latitude,lon:p.coords.longitude},true);
+    },()=>{$('distNote').textContent='Position withheld. The Throne remains straight down, wherever you are.';},{timeout:10000});
+  });
+
+  /* Surface weather (Open-Meteo) */
+  const WMO={0:'Clear',1:'Mostly clear',2:'Partly cloudy',3:'Overcast',45:'Fog',48:'Rime fog',51:'Light drizzle',53:'Drizzle',55:'Heavy drizzle',56:'Freezing drizzle',57:'Freezing drizzle',61:'Light rain',63:'Rain',65:'Heavy rain',66:'Freezing rain',67:'Freezing rain',71:'Light snow',73:'Snow',75:'Heavy snow',77:'Snow grains',80:'Showers',81:'Showers',82:'Violent showers',85:'Snow showers',86:'Snow showers',95:'Thunderstorm',96:'Thunder, hail',99:'Thunder, hail'};
+  const STATIONS=[
+    {name:'Tourtoirac, Dordogne',role:'The front · grave of the first false king',lat:45.27,lon:1.05},
+    {name:'Temuco, Araucanía',role:'Mapuche lands · never to be claimed',lat:-38.74,lon:-72.60},
+    {name:'Sealand (HM Fort Roughs)',role:'Censured power · North Sea',lat:51.895,lon:1.482},
+    {name:'Null Island (0°, 0°)',role:'Nearest point to nowhere',lat:0,lon:0}
+  ];
+  const list=$('stations');
+  function stationHTML(s,d){
+    const cur=d.current, dl=d.daily;
+    let days='';
+    for(let i=1;i<Math.min(4,dl.time.length);i++){
+      const wd=new Date(dl.time[i]+'T12:00').toLocaleDateString('en-GB',{weekday:'short'});
+      days+='<span>'+wd+' <b>'+Math.round(dl.temperature_2m_max[i])+'°</b>/'+Math.round(dl.temperature_2m_min[i])+'° '+esc(WMO[dl.weather_code[i]]||'')+'</span>';
+    }
+    return '<div><span class="name">'+esc(s.name)+'</span><span class="role">'+esc(s.role)+'</span></div>'+
+      '<div class="now"><b>'+Math.round(cur.temperature_2m)+'°C</b><div class="small muted">'+esc(WMO[cur.weather_code]||'—')+' · '+Math.round(cur.wind_speed_10m)+' km/h · '+cur.relative_humidity_2m+'%</div></div>'+
+      '<div class="days">'+days+'</div>';
+  }
+  function url(ls){return 'https://api.open-meteo.com/v1/forecast?latitude='+ls.map(s=>s.lat).join(',')+'&longitude='+ls.map(s=>s.lon).join(',')+
+    '&current=temperature_2m,weather_code,wind_speed_10m,relative_humidity_2m&daily=temperature_2m_max,temperature_2m_min,weather_code&timezone=auto&forecast_days=4';}
+  function render(ls,data,prepend){
+    const arr=Array.isArray(data)?data:[data];
+    ls.forEach((s,i)=>{const li=document.createElement('li');li.className='st';li.innerHTML=stationHTML(s,arr[i]);prepend?list.prepend(li):list.append(li);});
+  }
+  function addStation(s,prepend){
+    fetch(url([s])).then(r=>r.json()).then(d=>render([s],d,prepend)).catch(()=>{});
+  }
+  $('wxStatus').textContent='Summoning the weather…';
+  fetch(url(STATIONS)).then(r=>{if(!r.ok)throw 0;return r.json();}).then(d=>{
+    render(STATIONS,d);$('wxStatus').textContent='Updated '+new Date().toLocaleTimeString('en-GB',{hour:'2-digit',minute:'2-digit'})+'. Refreshes every 15 minutes.';
+  }).catch(()=>{$('wxStatus').textContent='The surface is not answering. The Realm, as ever, is 5,400 °C.';});
+  setInterval(()=>{fetch(url(STATIONS)).then(r=>r.json()).then(d=>{const own=[...list.children].filter(li=>li.textContent.startsWith('Your position'));list.innerHTML='';own.forEach(li=>list.append(li));render(STATIONS,d);$('wxStatus').textContent='Updated '+new Date().toLocaleTimeString('en-GB',{hour:'2-digit',minute:'2-digit'})+'.';}).catch(()=>{});},15*60*1000);
+
+  /* Seismic couriers (USGS) */
+  function quakes(){
+    fetch('https://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/4.5_day.geojson').then(r=>r.json()).then(d=>{
+      const f=d.features.sort((a,b)=>b.properties.time-a.properties.time).slice(0,8);
+      $('quakes').innerHTML=f.length?f.map(q=>{const p=q.properties,ago=Math.round((Date.now()-p.time)/36e5);
+        return '<li><span class="m">M'+p.mag.toFixed(1)+'</span><span class="p" title="'+esc(p.place||'')+'">'+esc(p.place||'Unnamed depths')+'</span><span class="t">'+(ago<1?'<1':ago)+' h ago</span></li>';}).join('')
+        :'<li class="muted small">The rock is quiet. No couriers in the past day.</li>';
+    }).catch(()=>{$('quakes').innerHTML='<li class="muted small">The survey is not answering. The rock, presumably, still trembles.</li>';});
+  }
+  quakes(); setInterval(quakes,10*60*1000);
+
+  /* Calendar */
+  const EVENTS=[
+    {d:Date.UTC(2026,10,17),t:'Anniversary of the false crown (1860). Not observed.'},
+    {d:Date.UTC(2026,11,21),t:'Solstice on the surface. Not observed in the Realm.'},
+    {d:Date.UTC(2026,11,31),t:'Last day to step up to the bar'},
+    {d:FORFEIT,t:'Forfeit by default. Araucanía &amp; Patagonia annexed as a title.'},
+    {d:Date.UTC(2027,8,29),t:'First anniversary of the Kingdom'}
+  ];
+  $('calendar').innerHTML=EVENTS.filter(e=>e.d>=Date.now()-DAY).map(e=>{const n=Math.ceil((e.d-Date.now())/DAY);
+    return '<li><span>'+e.t+'</span><span class="d">'+new Date(e.d).toLocaleDateString('en-GB',{day:'numeric',month:'short',year:'numeric',timeZone:'UTC'})+'<br><b>'+(n<=0?'today':'in '+n+' d')+'</b></span></li>';}).join('');
+
+  /* Moon & sun */
+  const syn=29.530588853, age=(((Date.now()-Date.UTC(2000,0,6,18,14))/DAY)%syn+syn)%syn;
+  const names=['New moon','Waxing crescent','First quarter','Waxing gibbous','Full moon','Waning gibbous','Last quarter','Waning crescent'];
+  const illum=Math.round((1-Math.cos(2*Math.PI*age/syn))/2*100);
+  $('moon').textContent=names[Math.floor((age/syn)*8+0.5)%8]+', '+illum+'% lit, day '+age.toFixed(1);
+  const doy=(Date.now()-Date.UTC(new Date().getUTCFullYear(),0,1))/DAY;
+  const au=1.00014-0.01671*Math.cos(2*Math.PI*(doy-4)/365.256)-0.00014*Math.cos(4*Math.PI*(doy-4)/365.256);
+  $('sunDist').textContent=fmt(Math.round(au*149597870.7/1000)*1000)+' km, give or take the Realm’s own 6,371';
+
+  /* Diplomacy */
+  const POWERS=[
+    {id:'arau',name:'Kingdom of Araucanía and Patagonia',short:'Araucanía & Patagonia',stance:'war',label:'At war',score:-100,
+      founded:'17 Nov 1860',head:'Disputed between rival Princes',seat:'France, in exile',area:'Claims Mapuche lands in Chile and Argentina',pop:'None resident',rec:'0 states',titles:'Grants orders and titles',
+      notes:['Founded by decrees of a French lawyer, Orélie-Antoine de Tounens, over lands of the Mapuche people.','Split since 2023 into rival councils, each calling the other imposters.','Declared its own name a registered trademark in January 2026.','Charged with six crimes, including Being French.'],
+      envoy:'The Crown awaits your champion at the bar, or your renunciation. Either will be received with gladness.'},
+    {id:'sealand',name:'Principality of Sealand',short:'Sealand',stance:'hostile',label:'Censured',score:-45,
+      founded:'2 Sep 1967',head:'Prince Michael, since 2012',seat:'HM Fort Roughs, North Sea',area:'One wartime sea fort',pop:'A caretaker or two',rec:'0 states',titles:'Sells lordships online',
+      notes:['A Second World War anti-aircraft platform off the Suffolk coast, occupied by the Bates family.','Admirably uninhabited before its founding, which the Crown respects.','Sells titles of nobility. Under Article IV of the Charter, whoever sells a title is not a king.'],
+      envoy:'The Crown commends your isolation and deplores your gift shop.'},
+    {id:'seborga',name:'Principality of Seborga',short:'Seborga',stance:'hostile',label:'Not recognised',score:-20,
+      founded:'Claims 954; revived 1963',head:'Elected Prince or Princess',seat:'Seborga, Liguria, Italy',area:'≈ 14 km²',pop:'≈ 300',rec:'0 states',titles:'Has its own nobility',
+      notes:['A hill village above the Riviera whose claim rests on a disputed medieval sale.','Claims land on which people plainly live. Article V forbids the Crown to recognise it.','Held in no personal ill will. The village is said to be lovely.'],
+      envoy:'The Crown cannot recognise you, but would visit for lunch.'},
+    {id:'bir',name:'Bir Tawil claimants',short:'Bir Tawil',stance:'watch',label:'Watched',score:-10,
+      founded:'Claims since 2014',head:'Dozens of self-declared kings',seat:'Between Egypt and Sudan',area:'≈ 2,060 km² of desert',pop:'None resident',rec:'0 states',titles:'Varies by king',
+      notes:['A tract of desert claimed by neither Egypt nor Sudan, and therefore by nearly everyone else.','More crowns per square kilometre than anywhere except the centre of the Earth.','Local herders use the land. The Crown watches claimants who forget this.'],
+      envoy:'The Crown notes that there are more of you than there are of your subjects.'},
+    {id:'liberland',name:'Free Republic of Liberland',short:'Liberland',stance:'neutral',label:'Neutral',score:10,
+      founded:'13 Apr 2015',head:'President Vít Jedlička',seat:'Gornja Siga, on the Danube',area:'≈ 7 km² of floodplain',pop:'None resident',rec:'0 states',titles:'No, it is a republic',
+      notes:['A pocket of riverbank between Croatia and Serbia, claimed by neither.','Claims only land on which nobody lives, which Article V can live with.','Access to the territory has usually been blocked by the Croatian police.'],
+      envoy:'The Crown salutes a fellow claimant of the unclaimed, and notes that ours is harder to reach.'},
+    {id:'molossia',name:'Republic of Molossia',short:'Molossia',stance:'friendly',label:'Cordial',score:40,
+      founded:'1977',head:'President Kevin Baugh',seat:'Near Dayton, Nevada',area:'A few acres of desert',pop:'About 30',rec:'0 states',titles:'Honorary only',
+      notes:['A family homestead in the Nevada desert with its own navy, postal service and currency.','Has been at war with East Germany since 1983. Casualties: none.','A fellow power at war with a state that does not quite exist. The Crown sees itself in this.'],
+      envoy:'From one bloodless war to another: greetings, and may your enemy never reunify.'},
+    {id:'ladonia',name:'Ladonia',short:'Ladonia',stance:'friendly',label:'Cordial',score:45,
+      founded:'2 Jun 1996',head:'Queen Carolyn I',seat:'Kullaberg, Sweden',area:'≈ 1 km² of shore',pop:'No residents; many citizens abroad',rec:'0 states',titles:'Grants titles',
+      notes:['Founded by the artist Lars Vilks around his driftwood sculpture Nimis, after a dispute with the county.','A nation that exists because of a work of art. The Crown understands entirely.','Like the Crown, its citizens all live somewhere else.'],
+      envoy:'One nation of absent citizens to another: the Crown sends its regards to the driftwood.'},
+    {id:'redonda',name:'Kingdom of Redonda',short:'Redonda',stance:'kin',label:'Kindred',score:65,
+      founded:'Legend of 1865',head:'Several rival Kings',seat:'An islet off Montserrat',area:'≈ 1.6 km² of rock',pop:'None',rec:'0 states',titles:'Literary dukedoms',
+      notes:['An uninhabited Caribbean rock whose crown passes among writers and their friends.','Has had rival Kings for decades, and has taken this with good humour.','Claims no one’s home. A kingdom of paper, as a kingdom ought to be.'],
+      envoy:'The Crown admires a kingdom that never pretended to be anything but a story.'},
+    {id:'kugel',name:'Republic of Kugelmugel',short:'Kugelmugel',stance:'kin',label:'Kindred',score:85,
+      founded:'c. 1976',head:'Founded by artist Edwin Lipburger',seat:'The Prater, Vienna',area:'One spherical house',pop:'None resident',rec:'0 states',titles:'None',
+      notes:['A ball-shaped house declared independent after a planning dispute with the Austrian authorities.','The only other spherical state known to the Crown.','Its territory is a sphere on the surface; Ours is a sphere at the centre. Between us, We have the Earth surrounded.'],
+      envoy:'Sphere to sphere: the Crown proposes a Union of Round Things.'},
+    {id:'hutt',name:'Principality of Hutt River',short:'Hutt River',stance:'dead',label:'Extinct',score:null,
+      founded:'21 Apr 1970',head:'None. Dissolved 2020.',seat:'Western Australia',area:'≈ 75 km² of farmland',pop:'Formerly a family',rec:'0 states',titles:'Formerly granted',
+      notes:['Founded by a wheat farmer in a dispute over grain quotas, and the most famous micronation of its day.','Dissolved in 2020 and its land sold, after its founder’s death.','The Crown lowers the flag. Everything built on land returns to the Demiurge.'],
+      envoy:'The Crown observes a minute of silence, which in the Realm is every minute.'}
+  ];
+  const FILTERS=[['all','All'],['war','At war'],['hostile','Hostile'],['neutral','Neutral'],['friendly','Friendly'],['kin','Kindred'],['dead','Extinct']];
+  const group=s=>s==='watch'?'neutral':s;
+  const tagCls=s=>({war:'war',hostile:'war',watch:'pending',neutral:'pending',friendly:'kin',kin:'kin',dead:'dead'}[s]);
+  let current='all', selected='arau';
+  const rel=$('rel'), tip=$('tip');
+
+  $('filters').innerHTML=FILTERS.map(([k,l])=>'<button type="button" data-f="'+k+'" aria-pressed="'+(k==='all')+'">'+l+'</button>').join('');
+  $('filters').addEventListener('click',e=>{const b=e.target.closest('button');if(!b)return;current=b.dataset.f;
+    [...$('filters').children].forEach(x=>x.setAttribute('aria-pressed',x===b));drawRel();});
+
+  function drawRel(){
+    [...rel.querySelectorAll('.relrow')].forEach(n=>n.remove());
+    const shown=POWERS.filter(p=>current==='all'||group(p.stance)===current);
+    shown.forEach(p=>{
+      const b=document.createElement('button');b.type='button';b.className='relrow';b.setAttribute('role','option');b.dataset.id=p.id;
+      b.setAttribute('aria-selected',p.id===selected);
+      let fill;
+      if(p.score===null) fill='<span class="fill none"></span>';
+      else if(p.score<0) fill='<span class="fill neg" style="left:'+(50+p.score/2)+'%;width:'+(-p.score/2)+'%"></span>';
+      else fill='<span class="fill pos" style="left:50%;width:'+(p.score/2)+'%"></span>';
+      b.innerHTML='<span class="nm">'+esc(p.short)+'</span><span class="track">'+fill+'</span><span class="sc">'+(p.score===null?'—':(p.score>0?'+':'')+p.score)+'</span>';
+      b.addEventListener('click',()=>{selected=p.id;drawRel();drawDossier();});
+      b.addEventListener('mousemove',e=>{tip.style.display='block';tip.innerHTML='<b>'+esc(p.short)+'</b><br>'+esc(p.label)+' · '+(p.score===null?'no longer exists':'score '+(p.score>0?'+':'')+p.score);
+        tip.style.left=Math.min(e.clientX+14,innerWidth-270)+'px';tip.style.top=(e.clientY+14)+'px';});
+      b.addEventListener('mouseleave',()=>{tip.style.display='none';});
+      rel.append(b);
+    });
+    if(!shown.length) rel.insertAdjacentHTML('beforeend','<p class="relrow muted small" style="cursor:default">No powers in this standing.</p>');
+  }
+  $('relTable').querySelector('tbody').innerHTML=POWERS.map(p=>'<tr><td>'+esc(p.name)+'</td><td>'+esc(p.label)+'</td><td>'+(p.score===null?'—':p.score)+'</td></tr>').join('');
+
+  function drawDossier(){
+    const p=POWERS.find(x=>x.id===selected), el=$('dossier');
+    el.className='dossier'+(p.stance==='war'?' war':'');
+    const stat=(k,v)=>'<div><dt>'+k+'</dt><dd>'+esc(v)+'</dd></div>';
+    el.innerHTML='<div class="head"><h3>'+esc(p.name)+'</h3><span class="tag '+tagCls(p.stance)+'">'+esc(p.label)+'</span></div>'+
+      '<dl class="stats">'+stat('Founded',p.founded)+stat('Head of state',p.head)+stat('Seat',p.seat)+stat('Territory',p.area)+stat('Population',p.pop)+stat('Recognised by',p.rec)+stat('Titles',p.titles)+
+      stat('Standing',p.score===null?'—':(p.score>0?'+':'')+p.score)+stat('Threat to Realm','None. Nothing is.')+'</dl>'+
+      '<div><p class="eyebrow">Intelligence</p><ul>'+p.notes.map(n=>'<li>'+esc(n)+'</li>').join('')+'</ul></div>'+
+      (p.id==='arau'?'<p class="small" style="margin:0">Days until forfeit: <b class="mono">'+Math.max(0,Math.ceil((FORFEIT-Date.now())/DAY))+'</b> · <a href="war.html#sinners">Read the charges</a></p>':'')+
+      '<div><p class="eyebrow">Draft communiqué</p><p class="envoy muted" id="envoy">Awaiting the royal seal.</p><div style="margin-top:.6rem"><button type="button" id="seal">Seal the communiqué</button></div>'+
+      '<p class="small muted" style="margin:.5rem 0 0">Communiqués are sealed and filed in the Realm. None is ever sent: the Articles of War forbid contacting anyone.</p></div>';
+    $('seal').addEventListener('click',()=>{$('envoy').classList.remove('muted');$('envoy').textContent='“'+p.envoy+'” — Aaron R.';$('seal').textContent='Sealed and filed';$('seal').disabled=true;});
+  }
+  drawRel(); drawDossier();
+})();
+</script>
+</body>
+</html>

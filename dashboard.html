@@ -533,7 +533,7 @@ footer{padding-block:1.6rem 2.6rem;margin-top:16px;font-family:var(--mono);font-
       (p.id==='arau'?'<p class="small" style="margin:0">Days until forfeit: <b class="mono">'+Math.max(0,Math.ceil((FORFEIT-Date.now())/DAY))+'</b> · <a href="war.html#sinners">Read the charges</a></p>':'')+
       '<div><p class="eyebrow">Draft communiqué</p><p class="envoy muted" id="envoy">Awaiting the royal seal.</p><div style="margin-top:.6rem"><button type="button" id="seal">Seal the communiqué</button></div>'+
       '<p class="small muted" style="margin:.5rem 0 0">Communiqués are sealed and filed in the Realm. None is ever sent: the Articles of War forbid contacting anyone.</p></div>';
-    $('seal').addEventListener('click',()=>{$('envoy').textContent='“'+p.envoy+'” — Aaron R.';$('seal').textContent='Sealed and filed';$('seal').disabled=true;});
+    $('seal').addEventListener('click',()=>{$('envoy').classList.remove('muted');$('envoy').textContent='“'+p.envoy+'” — Aaron R.';$('seal').textContent='Sealed and filed';$('seal').disabled=true;});
   }
   drawRel(); drawDossier();
 })();
